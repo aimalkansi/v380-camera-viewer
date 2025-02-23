@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V380 Camera Viewer</title>
+</head>
+<body>
+    <h1>Live Camera Feed</h1>
+    <video id="liveStream" controls autoplay width="640" height="360"></video>
+
+    <h2>SD Card Files</h2>
+    <ul id="fileList"></ul>
+
+    <script>
+        // Live stream from the backend
+        document.getElementById('liveStream').src = "/stream";
+
+        // Fetch and display SD card files
+        fetch('/files')
+            .then(response => response.json())
+            .then(files => {
+                const fileList = document.getElementById('fileList');
+                files.forEach(file => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<a href="/download/${file}" target="_blank">${file}</a>`;
+                    fileList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error("Error loading files:", error));
+    </script>
+</body>
+</html>
